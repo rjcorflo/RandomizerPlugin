@@ -1,8 +1,11 @@
 # Randomizer Plugin
 
-**This README.md file should be modified to describe the features, installation, configuration, and general usage of this plugin.**
+The **Randomizer** Plugin is for [Grav CMS](http://github.com/getgrav/grav).
 
-The **Randomizer** Plugin is for [Grav CMS](http://github.com/getgrav/grav). Send user to a random page
+Send user to a random page.
+
+### References
+* This plugin is just a plugin created for learning as seen in [Grav Plugin Documentation](https://learn.getgrav.org/plugins/plugin-tutorial)
 
 ## Installation
 
