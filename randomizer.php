@@ -1,7 +1,10 @@
 <?php
 namespace Grav\Plugin;
 
+use Grav\Common\Page\Collection;
 use Grav\Common\Plugin;
+use Grav\Common\Taxonomy;
+use Grav\Common\Uri;
 use RocketTheme\Toolbox\Event\Event;
 
 /**
@@ -38,26 +41,36 @@ class RandomizerPlugin extends Plugin
         }
 
         // Enable the main event we are interested in
-        $this->enable([
-            'onPageContentRaw' => ['onPageContentRaw', 0]
-        ]);
+        /** @var Uri $uri */
+        $uri = $this->grav['uri'];
+
+        $route = $this->config->get('plugins.randomizer.route');
+
+        if ($route && $route == $uri->path()) {
+            $this->enable([
+                'onPageInitialized' => ['onPageInitialized', 0]
+            ]);
+        }
     }
 
     /**
-     * Do some work for this event, full details of events can be found
-     * on the learn site: http://learn.getgrav.org/plugins/event-hooks
-     *
-     * @param Event $e
+     * Send user to a random page
      */
-    public function onPageContentRaw(Event $e)
+    public function onPageInitialized()
     {
-        // Get a variable from the plugin configuration
-        $text = $this->grav['config']->get('plugins.randomizer.text_var');
+        /** @var Taxonomy $taxonomy_map */
+        $taxonomy_map = $this->grav['taxonomy'];
 
-        // Get the current raw content
-        $content = $e['page']->getRawContent();
+        $filters = (array) $this->config->get('plugins.randomizer.filters');
+        $operator = $this->config->get('plugins.randomizer.filter_combinator', 'and');
 
-        // Prepend the output with the custom text and set back on the page
-        $e['page']->setRawContent($text . "\n\n" . $content);
+        if (count($filters)) {
+            $collection = new Collection();
+            $collection->append($taxonomy_map->findTaxonomy($filters, $operator)->toArray());
+            if (count($collection)) {
+                unset($this->grav['page']);
+                $this->grav['page'] = $collection->random()->current();
+            }
+        }
     }
 }
