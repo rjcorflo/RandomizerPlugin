@@ -1,0 +1,31 @@
+name: Randomizer
+version: 0.1.0
+description: Send user to a random page
+icon: plug
+author:
+  name: Acme Corp.
+  email: contact@acme.corp
+homepage: https://github.com/acme-corp-/grav-plugin-randomizer
+demo: http://demo.yoursite.com
+keywords: grav, plugin, etc
+bugs: https://github.com/acme-corp-/grav-plugin-randomizer/issues
+docs: https://github.com/acme-corp-/grav-plugin-randomizer/blob/develop/README.md
+license: MIT
+
+form:
+  validation: strict
+  fields:
+    enabled:
+      type: toggle
+      label: Plugin status
+      highlight: 1
+      default: 0
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: bool
+    text_var:
+      type: text
+      label: Text Variable
+      help: Text to add to the top of a page
